@@ -17,6 +17,9 @@ export default function Chat({ socket, userName, room }) {
       };
 
       await socket.emit('send_message', message);
+      setMessageList((list) => [...list, message]);
+      setCurrentMessage('');
+      document.querySelector('#textMessage').value='';
     }
   };
 
@@ -25,9 +28,9 @@ export default function Chat({ socket, userName, room }) {
       setMessageList((list) => [...list, message]);
     });
   }, [socket]);
-  if (messageList.length > 0) console.log(messageList);
+
   return (
-    <div>
+    <div className='chat-window'>
       <div className='chat-header'>
         <h1>{`Hi ${userName}, you are in room ${room}.`}</h1>
       </div>
@@ -45,8 +48,8 @@ export default function Chat({ socket, userName, room }) {
                     <p>{ messageContent.currentMessage }</p>
                   </div>
                   <div className="message-meta">
-                    <p id="time">{ messageContent.time }</p>
-                    <p id="username">{ messageContent.userName }</p>
+                    <p id="username">{ messageContent.userName } às </p>
+                    <p id="time">{ messageContent.time }.</p>
                   </div>
                 </div>
               </div>
@@ -57,6 +60,7 @@ export default function Chat({ socket, userName, room }) {
       <div className='chat-footer'>
         <input
           type='text'
+          id='textMessage'
           placeholder='Hello...'
           onChange={ ({ target: { value }}) => setCurrentMessage(value) }
         />
