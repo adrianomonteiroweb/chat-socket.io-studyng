@@ -23,7 +23,9 @@ io.on('connection', (socket) => {
     console.log(`ID: ${socket.id} joined room: ${data}`);
   });
 
-  socket.on('send_message', (message) => console.log(message));
+  socket.on('send_message', (message) => {
+    socket.to(message.room).emit('receive_message', message);
+  });
 
   socket.on('disconnect', () => {
     console.log('User Disconnected', socket.id);
